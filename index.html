@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Full Hike: Sail Racing — a fair 3D sailing regatta for your phone</title>
+<meta name="description" content="Full Hike is a 3D sailing regatta racer for phones: real wind shifts, gusts, telltales and tacking in quick 5-minute races. Fair, no pay-to-win. Join the beta waitlist.">
+<link rel="canonical" href="https://fullhike.com/">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#071a2e" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Full Hike">
+<meta property="og:url" content="https://fullhike.com/">
+<meta property="og:title" content="Full Hike: Sail Racing">
+<meta property="og:description" content="Read the wind. Win the beat. A fair, no-pay-to-win 3D sailing regatta for your phone — real wind shifts, gusts and telltales in 5-minute races. Join the beta.">
+<meta property="og:image" content="https://fullhike.com/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Full Hike: Sail Racing — a dinghy sailing upwind with telltales streaming.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Full Hike: Sail Racing">
+<meta name="twitter:description" content="A fair, no-pay-to-win 3D sailing regatta for your phone. Join the beta.">
+<meta name="twitter:image" content="https://fullhike.com/assets/og.png">
+
+<link rel="preload" href="/fonts/barlow-condensed-800.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Barlow Condensed";font-weight:600;font-display:swap;src:url(/fonts/barlow-condensed-600.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:800;font-display:swap;src:url(/fonts/barlow-condensed-800.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:800;font-style:italic;font-display:swap;src:url(/fonts/barlow-condensed-800i.woff2) format("woff2")}
+
+:root{
+  --bg:#f4f1ea;          /* sailcloth */
+  --bg-2:#e9e4d8;
+  --ink:#0b2540;
+  --ink-2:#3e5570;
+  --line:rgba(11,37,64,.14);
+  --sea:#1f6fd1;
+  --sea-deep:#0c3d7a;
+  --card:#ffffff;
+  --mark:#ff6a13;        /* racing mark orange */
+  --mark-ink:#b8460a;
+  --port:#e5383b;
+  --stbd:#16a557;
+  --focus:#ff6a13;
+  --hero-1:#cfe3f7; --hero-2:#f4f1ea;
+  --streak:rgba(31,111,209,.22);
+  --shadow:0 18px 40px -18px rgba(11,37,64,.45);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#071a2e; --bg-2:#0b2440; --ink:#eaf2fb; --ink-2:#a8bdd4; --line:rgba(234,242,251,.14);
+    --sea:#4a9bf0; --sea-deep:#9cc8f7; --card:#0e2a49; --mark:#ff7a2b; --mark-ink:#ffa064;
+    --hero-1:#0d3460; --hero-2:#071a2e; --streak:rgba(150,200,255,.16);
+    --shadow:0 18px 40px -18px rgba(0,0,0,.8); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#071a2e; --bg-2:#0b2440; --ink:#eaf2fb; --ink-2:#a8bdd4; --line:rgba(234,242,251,.14);
+  --sea:#4a9bf0; --sea-deep:#9cc8f7; --card:#0e2a49; --mark:#ff7a2b; --mark-ink:#ffa064;
+  --hero-1:#0d3460; --hero-2:#071a2e; --streak:rgba(150,200,255,.16);
+  --shadow:0 18px 40px -18px rgba(0,0,0,.8); color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+.wrap{width:100%;max-width:1120px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left)) 0 max(16px,env(safe-area-inset-right))}
+.display{font-family:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;letter-spacing:.01em}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- hero ---------- */
+.hero{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(180deg,var(--hero-1) 0%,var(--hero-2) 92%);padding:18px 0 40px}
+.streaks{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.streaks i{position:absolute;left:-40%;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--streak),transparent);animation:gust linear infinite}
+@keyframes gust{from{transform:translateX(0) rotate(-8deg)}to{transform:translateX(260vw) rotate(-8deg)}}
+@media (prefers-reduced-motion:reduce){.streaks i,.tt{animation:none!important}}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;font-size:20px;text-transform:uppercase;letter-spacing:.06em}
+.brand img{width:34px;height:34px;border-radius:9px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:5px 11px;background:color-mix(in srgb,var(--bg) 60%,transparent);backdrop-filter:blur(6px)}
+.chip b{width:8px;height:8px;border-radius:50%;background:var(--mark);box-shadow:0 0 0 3px color-mix(in srgb,var(--mark) 25%,transparent)}
+
+.hero-grid{display:grid;gap:28px;margin-top:34px}
+.kicker{font-size:15px;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--sea);margin:0 0 6px}
+h1{margin:0;font-weight:800;font-style:italic;text-transform:uppercase;line-height:.86;font-size:clamp(68px,22vw,132px);letter-spacing:-.005em}
+h1 .sub{display:block;font-style:normal;font-weight:600;font-size:.3em;letter-spacing:.32em;line-height:1.1;margin-top:.35em;color:var(--ink-2)}
+.tagline{display:flex;align-items:center;gap:12px;margin:22px 0 0;font-size:clamp(25px,6.6vw,34px);font-weight:800;line-height:1.1;text-transform:uppercase}
+.telltales{flex:none;width:34px;height:22px;overflow:visible}
+.tt{fill:none;stroke-width:3.2;stroke-linecap:round;transform-origin:2px 50%;animation:flick 2.6s ease-in-out infinite}
+.tt.p{stroke:var(--port)}.tt.s{stroke:var(--stbd);animation-delay:-1.1s}
+@keyframes flick{0%,100%{transform:rotate(0) scaleX(1)}30%{transform:rotate(3deg) scaleX(.96)}60%{transform:rotate(-2deg) scaleX(1.02)}}
+.pitch{margin:16px 0 0;font-size:18px;color:var(--ink-2);max-width:34em}
+.pitch strong{color:var(--ink)}
+
+/* ---------- sign-up ---------- */
+.signup{margin-top:24px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);position:relative}
+.signup::before{content:"";position:absolute;left:18px;top:-1px;width:56px;height:4px;border-radius:0 0 4px 4px;background:var(--mark)}
+.signup h2{margin:2px 0 4px;font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+.signup p.lede{margin:0 0 14px;font-size:15px;color:var(--ink-2)}
+.row{display:flex;flex-direction:column;gap:10px}
+input[type=email]{width:100%;font:inherit;font-size:17px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:14px 14px;min-height:52px;outline:none;transition:border-color .15s}
+input[type=email]::placeholder{color:color-mix(in srgb,var(--ink-2) 75%,transparent)}
+input[type=email]:focus-visible{border-color:var(--sea);box-shadow:0 0 0 3px color-mix(in srgb,var(--sea) 25%,transparent)}
+button{font:inherit;cursor:pointer}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 22px;border:0;border-radius:12px;background:var(--mark);color:#1b0c02;font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:800;font-size:21px;text-transform:uppercase;letter-spacing:.05em;transition:transform .1s,filter .15s;text-decoration:none}
+.btn:hover{filter:brightness(1.06)}.btn:active{transform:translateY(1px)}
+.btn:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.btn[disabled]{opacity:.65;cursor:progress}
+.btn svg{width:20px;height:20px}
+.privacy{display:flex;gap:8px;align-items:flex-start;margin:12px 0 0;font-size:13.5px;line-height:1.45;color:var(--ink-2)}
+.privacy svg{flex:none;width:16px;height:16px;margin-top:1px;color:var(--stbd)}
+.msg{margin:12px 0 0;font-size:15px;font-weight:600;min-height:0}
+.msg.err{color:var(--port)}
+.done{display:none;text-align:left}
+.signup.ok form{display:none}.signup.ok .done{display:block}
+.done h2{color:var(--stbd)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+
+/* ---------- phone shot ---------- */
+.device{position:relative;border-radius:26px;padding:10px;background:#0a1626;box-shadow:var(--shadow),inset 0 0 0 1.5px #2a3a52}
+.device::after{content:"";position:absolute;left:4px;top:50%;width:4px;height:44px;margin-top:-22px;border-radius:3px;background:#22324a}
+.device img{border-radius:17px;aspect-ratio:1334/750;width:100%;object-fit:cover;background:#2a78d0}
+.caption{display:flex;align-items:center;gap:8px;margin:12px 4px 0;font-size:14px;color:var(--ink-2)}
+.caption em{font-style:normal;opacity:.75}
+.caption .dot{flex:none;width:10px;height:10px;border-radius:2px;background:var(--mark);transform:rotate(45deg)}
+
+/* ---------- course ---------- */
+section{padding:56px 0}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+.sec-head h2{margin:0;font-size:clamp(36px,10vw,56px);font-weight:800;font-style:italic;text-transform:uppercase;line-height:.95}
+.sec-head span{font-size:14px;color:var(--ink-2);font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.course{position:relative;list-style:none;margin:0;padding:0;display:grid;gap:14px;counter-reset:leg}
+.leg{position:relative;padding:18px 18px 18px 70px;background:var(--card);border:1px solid var(--line);border-radius:16px}
+.leg::before{counter-increment:leg;content:counter(leg,decimal-leading-zero);position:absolute;left:16px;top:16px;width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:var(--bg-2);font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:19px;color:var(--sea-deep)}
+.leg.mark::before{background:var(--mark);color:#1b0c02}
+.leg h3{margin:0 0 4px;font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:800;font-size:25px;text-transform:uppercase;letter-spacing:.02em;line-height:1.1}
+.leg p{margin:0;color:var(--ink-2);font-size:16px}
+.leg .tag{display:inline-block;margin-bottom:4px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mark-ink)}
+
+/* ---------- second shot band ---------- */
+.band{background:var(--bg-2);border-block:1px solid var(--line)}
+.band-grid{display:grid;gap:26px;align-items:center}
+.band h2{margin:0 0 10px;font-size:clamp(34px,9vw,52px);font-weight:800;font-style:italic;text-transform:uppercase;line-height:.95}
+.band p{margin:0 0 18px;color:var(--ink-2)}
+.fair{display:grid;gap:10px;margin:0 0 22px;padding:0;list-style:none}
+.fair li{display:flex;gap:10px;align-items:flex-start}
+.fair svg{flex:none;width:22px;height:22px;color:var(--stbd);margin-top:1px}
+
+footer{padding:34px 0 calc(34px + env(safe-area-inset-bottom));font-size:14px;color:var(--ink-2)}
+.foot{display:flex;flex-direction:column;gap:10px}
+.foot .brand{font-size:16px;color:var(--ink)}
+.foot .brand img{width:26px;height:26px;border-radius:7px}
+
+/* ---------- larger screens ---------- */
+@media (min-width:560px){
+  .row{flex-direction:row}
+  .row .btn{flex:none}
+}
+@media (min-width:900px){
+  .hero{padding:24px 0 72px}
+  .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:56px;align-items:center;margin-top:56px}
+  h1{font-size:clamp(84px,8.4vw,120px);white-space:nowrap}
+  .hero .device{transform:rotate(-2.5deg)}
+  .course{grid-template-columns:repeat(2,1fr)}
+  .course .leg:last-child{grid-column:1/-1}
+  .band-grid{grid-template-columns:1.1fr 1fr;gap:56px}
+  section{padding:84px 0}
+  .foot{flex-direction:row;justify-content:space-between;align-items:center}
+}
+@media (min-width:1100px){
+  .course{grid-template-columns:repeat(3,1fr)}
+  .course .leg:last-child{grid-column:auto}
+  .course .leg:nth-child(4){grid-column:span 2}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="streaks" aria-hidden="true">
+    <i style="top:12%;width:46%;animation-duration:9s;animation-delay:-2s"></i>
+    <i style="top:27%;width:30%;animation-duration:12s;animation-delay:-7s"></i>
+    <i style="top:43%;width:55%;animation-duration:10s;animation-delay:-4s"></i>
+    <i style="top:61%;width:36%;animation-duration:14s;animation-delay:-10s"></i>
+    <i style="top:78%;width:48%;animation-duration:11s;animation-delay:-1s"></i>
+    <i style="top:90%;width:28%;animation-duration:13s;animation-delay:-6s"></i>
+  </div>
+  <div class="wrap">
+    <div class="top">
+      <a class="brand display" href="/" aria-label="Full Hike home"><img src="/assets/icon.svg" alt="" width="34" height="34">Full Hike</a>
+      <span class="chip"><b aria-hidden="true"></b>Beta coming soon</span>
+    </div>
+
+    <div class="hero-grid">
+      <div>
+        <p class="kicker display">3D regatta racing for your phone</p>
+        <h1 class="display">Full Hike<span class="sub">Sail Racing</span></h1>
+        <p class="tagline display">
+          <svg class="telltales" viewBox="0 0 34 22" aria-hidden="true"><path class="tt p" d="M2 6c5-3 9 3 15 0s10 2 15-1"/><path class="tt s" d="M2 16c5-3 9 3 15 0s10 2 15-1"/></svg>
+          Read the wind. Win the beat.
+        </p>
+        <p class="pitch">Real wind shifts, gusts you can see coming, telltales that tell the truth, and tacks that win or lose the race. <strong>Quick five-minute races</strong> against computer boats, playable offline, and <strong>fair by design: no pay-to-win, ever.</strong></p>
+
+        <div class="signup" id="join">
+          <form id="waitlist" novalidate>
+            <h2 class="display">Get on the start line</h2>
+            <p class="lede">Join the waitlist for the closed beta. One email when it's your turn.</p>
+            <div class="row">
+              <label class="sr" for="email">Email address</label>
+              <input id="email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="you@example.com" required>
+              <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+              <button class="btn" type="submit" id="submit">Join the beta
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+            <p class="msg" id="msg" role="status" aria-live="polite"></p>
+          </form>
+          <div class="done" tabindex="-1" id="done">
+            <h2 class="display">You're on the list</h2>
+            <p class="lede">Thanks! We'll email you when the beta opens. See you on the water.</p>
+          </div>
+          <p class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span>We only email you about Full Hike. No spam, never shared or sold.</span></p>
+        </div>
+      </div>
+
+      <figure style="margin:0">
+        <div class="device">
+          <img src="/assets/shot-shift-1334.webp" srcset="/assets/shot-shift-800.webp 800w, /assets/shot-shift-1334.webp 1334w" sizes="(min-width:900px) 560px, 100vw" width="1334" height="750" alt="In-game: a dinghy beating upwind on starboard, the wind arrow shows a 6 degree knock, telltales stream on the sail and the orange windward mark is 123 metres away." fetchpriority="high">
+        </div>
+        <figcaption class="caption"><span class="dot" aria-hidden="true"></span><span>Knocked 6° on starboard. Time to tack. <em>Real in-game screenshot.</em></span></figcaption>
+      </figure>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><h2 class="display">The course</h2><span>One race · ~5 min</span></div>
+      <ol class="course">
+        <li class="leg"><span class="tag">Start</span><h3>Five-minute races</h3><p>Quick to start, quick to finish. Thumb-friendly steering and trim, built for a coffee break or the train home.</p></li>
+        <li class="leg"><span class="tag">Beat</span><h3>Real shifts &amp; gusts</h3><p>The wind is never steady. Spot the dark patch, sail into the puff, and tack on the knock before the fleet does.</p></li>
+        <li class="leg mark"><span class="tag">Windward mark</span><h3>Telltales &amp; trim</h3><p>Ease and trim until the telltales stream. The sail tells you when you're fast, just like on the water.</p></li>
+        <li class="leg"><span class="tag">Run</span><h3>Race the computer fleet</h3><p>Line up against computer boats, fully offline. No signal on the dock? No problem.</p></li>
+        <li class="leg"><span class="tag">Finish</span><h3>Fair, no pay-to-win</h3><p>Skill wins races. No boosters, no paid upgrades that make your boat faster.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap band-grid">
+      <figure style="margin:0">
+        <div class="device">
+          <img src="/assets/shot-rounding-1334.webp" srcset="/assets/shot-rounding-800.webp 800w, /assets/shot-rounding-1334.webp 1334w" sizes="(min-width:900px) 560px, 100vw" width="1334" height="750" loading="lazy" decoding="async" alt="In-game: rounding the orange windward mark at 3.7 knots, 7 metres to go, sail eased for the run.">
+        </div>
+        <figcaption class="caption"><span class="dot" aria-hidden="true"></span><span>Rounding the windward mark, sheet eased for the run.</span></figcaption>
+      </figure>
+      <div>
+        <h2 class="display">Built by sailors, for sailors</h2>
+        <p>Full Hike is for club and dinghy racers who want a proper race in their pocket during the off-season, and for anyone curious what makes sailing tactics tick.</p>
+        <ul class="fair">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Wind that behaves like wind: lifts, knocks and gusts.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Same boat speed for everyone. Money can't buy a faster boat.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Closed beta first. Your feedback shapes the game.</span></li>
+        </ul>
+        <a class="btn" href="#join">Join the beta
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="brand display"><img src="/assets/icon.svg" alt="" width="26" height="26">Full Hike: Sail Racing</span>
+    <span>© 2026 Full Hike · We only email you about Full Hike. No trackers, no cookies.</span>
+  </div>
+</footer>
+
+<script>
+// Waitlist: posts to a private Google Form (responses are only visible to the owner).
+var FORM = {
+  action: "",   // https://docs.google.com/forms/d/e/<id>/formResponse
+  entry: ""     // entry.<number> of the "Email" question
+};
+(function () {
+  var form = document.getElementById("waitlist"), box = document.getElementById("join");
+  var input = document.getElementById("email"), btn = document.getElementById("submit"), msg = document.getElementById("msg");
+  var ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    msg.className = "msg"; msg.textContent = "";
+    var email = input.value.trim();
+    if (!ok.test(email)) { msg.className = "msg err"; msg.textContent = "Please enter a valid email address."; input.focus(); return; }
+    if (form.website.value) { box.classList.add("ok"); return; }  // bot honeypot
+    if (!FORM.action) { msg.className = "msg err"; msg.textContent = "Sign-ups open in a moment. Please try again shortly."; return; }
+    btn.disabled = true; msg.textContent = "Sending…";
+    var body = new URLSearchParams(); body.append(FORM.entry, email);
+    fetch(FORM.action, { method: "POST", mode: "no-cors", body: body })
+      .then(function () { box.classList.add("ok"); document.getElementById("done").focus(); })
+      .catch(function () { msg.className = "msg err"; msg.textContent = "Couldn't reach the server. Check your connection and try again."; })
+      .then(function () { btn.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>
