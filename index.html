@@ -159,6 +159,9 @@ footer{padding:34px 0 calc(34px + env(safe-area-inset-bottom));font-size:14px;co
 .foot{display:flex;flex-direction:column;gap:10px}
 .foot .brand{font-size:16px;color:var(--ink)}
 .foot .brand img{width:26px;height:26px;border-radius:7px}
+.privacy a,.foot-links a{text-underline-offset:.18em}
+.privacy a:hover,.foot-links a:hover{color:var(--sea-deep)}
+.foot-links{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
 
 /* ---------- larger screens ---------- */
 @media (min-width:560px){
@@ -227,7 +230,7 @@ footer{padding:34px 0 calc(34px + env(safe-area-inset-bottom));font-size:14px;co
             <h2 class="display">You're on the list</h2>
             <p class="lede">Thanks! We'll email you when the beta opens. See you on the water.</p>
           </div>
-          <p class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span>We only email you about Full Hike. No spam, never shared or sold.</span></p>
+          <p class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span>We only email you about Full Hike. No spam, <a href="/privacy/">never shared or sold</a>.</span></p>
         </div>
       </div>
 
@@ -282,6 +285,7 @@ footer{padding:34px 0 calc(34px + env(safe-area-inset-bottom));font-size:14px;co
 <footer>
   <div class="wrap foot">
     <span class="brand display"><img src="/assets/icon.svg" alt="" width="26" height="26">Full Hike: Sail Racing</span>
+    <nav class="foot-links" aria-label="Footer"><a href="/privacy/">Privacy</a><span aria-hidden="true">·</span><a href="/support/">Support</a></nav>
     <span>© 2026 Full Hike · We only email you about Full Hike. No trackers, no cookies.</span>
   </div>
 </footer>
